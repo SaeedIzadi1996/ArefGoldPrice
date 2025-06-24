@@ -208,14 +208,18 @@
             document.getElementById('share-button').style.display = 'block';
         }
 
+        
+
         function shareResult() {
-            const resultDiv = document.getElementById('result').innerHTML;
-            const shareText = `نتیجه محاسبه قیمت:\n${resultDiv}\nمحاسبه‌شده در ${new Date().toLocaleString('fa-IR')}`;
-            if (window.Telegram && Telegram.WebApp) {
-                Telegram.WebApp.sendData(shareText);
-            } else {
-                alert('این قابلیت فقط در تلگرام کار می‌کنه!');
-            }
+        const resultDiv = document.getElementById('result').innerText;
+        const shareText = `نتیجه محاسبه قیمت:\n${resultDiv}\nمحاسبه‌شده در ${new Date().toLocaleString('fa-IR')}`;
+
+        navigator.clipboard.writeText(shareText).then(() => {
+            alert('نتیجه در کلیپ‌بورد کپی شد!');
+            }).catch(err => {
+            alert('خطا در کپی کردن: ' + err);
+            });
         }
+        
     </script>
 </html>
