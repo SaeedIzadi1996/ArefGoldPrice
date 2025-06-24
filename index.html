@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>محاسبه قیمت طلا و سکه</title>
+    <!-- لود فونت Vazir از CDN -->
+    <link href="https://fonts.googleapis.com/css2?family=Vazir:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Vazir', sans-serif; /* استفاده از فونت Vazir */
+            background-color: #1c2526;
+            color: #ffffff;
+            margin: 0;
+            padding: 20px;
+            direction: rtl;
+        }
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            background: #2a3436;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #444;
+            border-radius: 5px;
+            background: #333;
+            color: #fff;
+            font-family: 'Vazir', sans-serif; /* فونت برای ورودی‌ها */
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #0088cc;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            font-family: 'Vazir', sans-serif; /* فونت برای دکمه */
+        }
+        button:hover {
+            background-color: #006bb3;
+        }
+        #result {
+            margin-top: 15px;
+            padding: 10px;
+            background: #222;
+            border-radius: 5px;
+            display: none;
+            font-family: 'Vazir', sans-serif; /* فونت برای نتیجه */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="input-group">
+            <label for="ounce">قیمت انس طلا (دلار):</label>
+            <input type="number" id="ounce" placeholder="مثال: 1800" required>
+        </div>
+        <div class="input-group">
+            <label for="usd">قیمت دلار (تومان):</label>
+            <input type="number" id="usd" placeholder="مثال: 50000" required>
+        </div>
+        <div class="input-group">
+            <label for="coinCellBubble">CoinCellBubble (ثابت):</label>
+            <input type="number" id="coinCellBubble" value="0" required>
+        </div>
+        <div class="input-group">
+            <label for="coinBuyBubble">CoinBuyBubble (ثابت):</label>
+            <input type="number" id="coinBuyBubble" value="0" required>
+        </div>
+        <div class="input-group">
+            <label for="halfCoinCellBubble">HalfCoinCellBubble (ثابت):</label>
+            <input type="number" id="halfCoinCellBubble" value="0" required>
+        </div>
+        <div class="input-group">
+            <label for="halfCoinBuyBubble">HalfCoinBuyBubble (ثابت):</label>
+            <input type="number" id="halfCoinBuyBubble" value="0" required>
+        </div>
+        <div class="input-group">
+            <label for="quarterCoinCellBubble">QuarterCoinCellBubble (ثابت):</label>
+            <input type="number" id="quarterCoinCellBubble" value="0" required>
+        </div>
+        <div class="input-group">
+            <label for="quarterCoinBuyBubble">QuarterCoinBuyBubble (ثابت):</label>
+            <input type="number" id="quarterCoinBuyBubble" value="0" required>
+        </div>
+        <button onclick="calculate()">محاسبه</button>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        function calculate() {
+            const ounce = parseFloat(document.getElementById('ounce').value);
+            const usd = parseFloat(document.getElementById('usd').value);
+            const coinCellBubble = parseFloat(document.getElementById('coinCellBubble').value);
+            const coinBuyBubble = parseFloat(document.getElementById('coinBuyBubble').value);
+            const halfCoinCellBubble = parseFloat(document.getElementById('halfCoinCellBubble').value);
+            const halfCoinBuyBubble = parseFloat(document.getElementById('halfCoinBuyBubble').value);
+            const quarterCoinCellBubble = parseFloat(document.getElementById('quarterCoinCellBubble').value);
+            const quarterCoinBuyBubble = parseFloat(document.getElementById('quarterCoinBuyBubble').value);
+
+            if (isNaN(ounce) || isNaN(usd) || isNaN(coinCellBubble) || isNaN(coinBuyBubble) || 
+                isNaN(halfCoinCellBubble) || isNaN(halfCoinBuyBubble) || 
+                isNaN(quarterCoinCellBubble) || isNaN(quarterCoinBuyBubble)) {
+                alert('لطفاً همه مقادیر را به‌درستی وارد کنید!');
+                return;
+            }
+
+            const universalQuote = (ounce * usd) / 9.57;
+            const dollarBuy = usd - 500;
+            const dollarSell = usd + 500;
+            const coinCell = universalQuote * 2.253 + coinCellBubble;
+            const coinBuy = universalQuote * 2.253 + coinBuyBubble;
+            const halfCoinCell = (universalQuote * 2.253) / 2 + halfCoinCellBubble;
+            const halfCoinBuy = (universalQuote * 2.253) / 2 + halfCoinBuyBubble;
+            const quarterCoinCell = (universalQuote * 2.253) / 4 + quarterCoinCellBubble;
+            const quarterCoinBuy = (universalQuote * 2.253) / 4 + quarterCoinBuyBubble;
+
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = `
+                قیمت خرید دلار: ${dollarBuy.toLocaleString()} تومان<br>
+                قیمت فروش دلار: ${dollarSell.toLocaleString()} تومان<br>
+                قیمت سکه تمام (خرید): ${coinCell.toLocaleString()} تومان<br>
+                قیمت سکه تمام (فروش): ${coinBuy.toLocaleString()} تومان<br>
+                قیمت نیم‌سکه (خرید): ${halfCoinCell.toLocaleString()} تومان<br>
+                قیمت نیم‌سکه (فروش): ${halfCoinBuy.toLocaleString()} تومان<br>
+                قیمت ربع‌سکه (خرید): ${quarterCoinCell.toLocaleString()} تومان<br>
+                قیمت ربع‌سکه (فروش): ${quarterCoinBuy.toLocaleString()} تومان
+            `;
+        }
+    </script>
+</html>
