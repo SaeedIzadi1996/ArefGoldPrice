@@ -167,26 +167,18 @@
             }
 
             // محاسبات جدید
-            const universalQuote = Math.round((ounce * usd) / (9.57)); // مظنه جهانی با اعمال دلتا
-            const spread = delta * usd;
-            const usdCell = usd + spread;
-            const usdBuy = usd - spread;
-            const qouteCell = once * usdCell / 9.57;
-            const qouteBuy = once * usdBuy / 9.57;
-            const cellQoute = qouteCell * 2.253 + coinBubble;
-            const coinBuy = Math.round(qouteBuy * 2.253 + coinBubble); // قیمت خرید سکه
-            const coinSell = Math.round(qouteCell * 2.253 + coinBubble); // قیمت فروش سکه (با کاهش نصف حباب)
-            const halfCoinBuy = Math.round(qouteBuy / 2 * 2.253 + halfCoinBubble); // قیمت خرید نیم‌سکه
-            const halfCoinSell = Math.round(qouteCell / 2 * 2.253 + halfCoinBubble); // قیمت فروش نیم‌سکه
-            const quarterCoinBuy = Math.round(qouteBuy / 4 * 2.253 + halfCoinBubble); // قیمت خرید ربع‌سکه
-            const quarterCoinSell = Math.round(qouteCell / 4 * 2.253 + quarterCoinBubble); // قیمت فروش ربع‌سکه
+            const universalQuote = Math.round((ounce * usd) * (1 + delta)); // مظنه جهانی با اعمال دلتا
+            const coinBuy = Math.round(universalQuote + coinBubble); // قیمت خرید سکه
+            const coinSell = Math.round(universalQuote - (coinBubble * 0.5)); // قیمت فروش سکه (با کاهش نصف حباب)
+            const halfCoinBuy = Math.round(universalQuote / 2 + halfCoinBubble); // قیمت خرید نیم‌سکه
+            const halfCoinSell = Math.round(universalQuote / 2 - (halfCoinBubble * 0.5)); // قیمت فروش نیم‌سکه
+            const quarterCoinBuy = Math.round(universalQuote / 4 + quarterCoinBubble); // قیمت خرید ربع‌سکه
+            const quarterCoinSell = Math.round(universalQuote / 4 - (quarterCoinBubble * 0.5)); // قیمت فروش ربع‌سکه
 
             const resultDiv = document.getElementById('result');
             resultDiv.style.display = 'block';
             resultDiv.innerHTML = `
                 مظنه جهانی: ${universalQuote.toLocaleString()} تومان<br>
-                دلار (خرید): ${usdBuy.toLocaleString()} تومان<br>
-                دلار (فروش): ${usdCell.toLocaleString()} تومان<br>
                 قیمت سکه (خرید): ${coinBuy.toLocaleString()} تومان<br>
                 قیمت سکه (فروش): ${coinSell.toLocaleString()} تومان<br>
                 قیمت نیم‌سکه (خرید): ${halfCoinBuy.toLocaleString()} تومان<br>
