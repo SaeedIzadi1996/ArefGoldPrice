@@ -22,11 +22,11 @@
             max-width: 400px;
             margin: 0 auto;
             padding: 20px;
-            box-sizing: border-box; /* اطمینان از محاسبه padding در عرض کل */
+            box-sizing: border-box;
         }
         .input-group {
             margin-bottom: 15px;
-            padding: 0 10px; /* فاصله یکسان از چپ و راست */
+            padding: 0 10px;
             box-sizing: border-box;
         }
         label {
@@ -42,7 +42,7 @@
             background: #f0f0f0;
             color: #000;
             font-family: 'Vazir', sans-serif;
-            box-sizing: border-box; /* اطمینان از محاسبه padding در عرض */
+            box-sizing: border-box;
         }
         button {
             width: 100%;
@@ -77,7 +77,7 @@
             box-sizing: border-box;
         }
         #settings-panel .input-group {
-            padding: 0; /* حذف padding اضافی داخل پنل */
+            padding: 0;
         }
         #share-button {
             background-color: #2481cc;
@@ -90,38 +90,30 @@
 <body>
     <div class="container">
         <div class="input-group">
-            <label for="ounce">قیمت انس طلا (دلار):</label>
+            <label for="ounce">قیمت جهانی طلا (دلار به اونس):</label>
             <input type="number" id="ounce" placeholder="مثال: 1800" required>
         </div>
         <div class="input-group">
-            <label for="usd">قیمت دلار (تومان):</label>
+            <label for="usd">نرخ تبدیل دلار به تومان:</label>
             <input type="number" id="usd" placeholder="مثال: 50000" required>
         </div>
-        <button onclick="toggleSettings()">تنظیم مقادیر ثابت</button>
+        <button onclick="toggleSettings()">تنظیم ضرایب و حباب</button>
         <div id="settings-panel">
             <div class="input-group">
-                <label for="coinCellBubble">حباب فروش سکه:</label>
-                <input type="number" id="coinCellBubble" value="0" required>
+                <label for="delta">دلتا (ضریب تنظیم):</label>
+                <input type="number" id="delta" value="0.004" step="0.001" required>
             </div>
             <div class="input-group">
-                <label for="coinBuyBubble">حباب خرید سکه:</label>
-                <input type="number" id="coinBuyBubble" value="0" required>
+                <label for="coinBubble">حباب سکه (تومان):</label>
+                <input type="number" id="coinBubble" value="10000000" required>
             </div>
             <div class="input-group">
-                <label for="halfCoinCellBubble">حباب فروش نیم سکه:</label>
-                <input type="number" id="halfCoinCellBubble" value="0" required>
+                <label for="halfCoinBubble">حباب نیم‌سکه (تومان):</label>
+                <input type="number" id="halfCoinBubble" value="10000000" required>
             </div>
             <div class="input-group">
-                <label for="halfCoinBuyBubble">حباب خرید نیم سکه:</label>
-                <input type="number" id="halfCoinBuyBubble" value="0" required>
-            </div>
-            <div class="input-group">
-                <label for="quarterCoinCellBubble">حباب فروش ربع سکه:</label>
-                <input type="number" id="quarterCoinCellBubble" value="0" required>
-            </div>
-            <div class="input-group">
-                <label for="quarterCoinBuyBubble">حباب خرید ربع سکه:</label>
-                <input type="number" id="quarterCoinBuyBubble" value="0" required>
+                <label for="quarterCoinBubble">حباب ربع‌سکه (تومان):</label>
+                <input type="number" id="quarterCoinBubble" value="10000000" required>
             </div>
         </div>
         <button onclick="calculate()">محاسبه</button>
@@ -133,24 +125,20 @@
         // تنظیمات اولیه WebApp
         if (window.Telegram && Telegram.WebApp) {
             Telegram.WebApp.ready();
-            Telegram.WebApp.expand(); // تمام صفحه کردن مینی‌اپ
+            Telegram.WebApp.expand();
         }
 
         // بارگذاری مقادیر ذخیره‌شده از localStorage
         document.addEventListener('DOMContentLoaded', () => {
-            const savedCoinCellBubble = localStorage.getItem('coinCellBubble');
-            const savedCoinBuyBubble = localStorage.getItem('coinBuyBubble');
-            const savedHalfCoinCellBubble = localStorage.getItem('halfCoinCellBubble');
-            const savedHalfCoinBuyBubble = localStorage.getItem('halfCoinBuyBubble');
-            const savedQuarterCoinCellBubble = localStorage.getItem('quarterCoinCellBubble');
-            const savedQuarterCoinBuyBubble = localStorage.getItem('quarterCoinBuyBubble');
+            const savedDelta = localStorage.getItem('delta') || 0.004;
+            const savedCoinBubble = localStorage.getItem('coinBubble') || 10000000;
+            const savedHalfCoinBubble = localStorage.getItem('halfCoinBubble') || 10000000;
+            const savedQuarterCoinBubble = localStorage.getItem('quarterCoinBubble') || 10000000;
 
-            if (savedCoinCellBubble) document.getElementById('coinCellBubble').value = savedCoinCellBubble;
-            if (savedCoinBuyBubble) document.getElementById('coinBuyBubble').value = savedCoinBuyBubble;
-            if (savedHalfCoinCellBubble) document.getElementById('halfCoinCellBubble').value = savedHalfCoinCellBubble;
-            if (savedHalfCoinBuyBubble) document.getElementById('halfCoinBuyBubble').value = savedHalfCoinBuyBubble;
-            if (savedQuarterCoinCellBubble) document.getElementById('quarterCoinCellBubble').value = savedQuarterCoinCellBubble;
-            if (savedQuarterCoinBuyBubble) document.getElementById('quarterCoinBuyBubble').value = savedQuarterCoinBuyBubble;
+            document.getElementById('delta').value = savedDelta;
+            document.getElementById('coinBubble').value = savedCoinBubble;
+            document.getElementById('halfCoinBubble').value = savedHalfCoinBubble;
+            document.getElementById('quarterCoinBubble').value = savedQuarterCoinBubble;
         });
 
         function toggleSettings() {
@@ -161,65 +149,62 @@
         function calculate() {
             const ounce = parseFloat(document.getElementById('ounce').value);
             const usd = parseFloat(document.getElementById('usd').value);
-            const coinCellBubble = parseFloat(document.getElementById('coinCellBubble').value);
-            const coinBuyBubble = parseFloat(document.getElementById('coinBuyBubble').value);
-            const halfCoinCellBubble = parseFloat(document.getElementById('halfCoinCellBubble').value);
-            const halfCoinBuyBubble = parseFloat(document.getElementById('halfCoinBuyBubble').value);
-            const quarterCoinCellBubble = parseFloat(document.getElementById('quarterCoinCellBubble').value);
-            const quarterCoinBuyBubble = parseFloat(document.getElementById('quarterCoinBuyBubble').value);
+            const delta = parseFloat(document.getElementById('delta').value);
+            const coinBubble = parseFloat(document.getElementById('coinBubble').value);
+            const halfCoinBubble = parseFloat(document.getElementById('halfCoinBubble').value);
+            const quarterCoinBubble = parseFloat(document.getElementById('quarterCoinBubble').value);
 
-            // ذخیره مقادیر ثابت توی localStorage
-            localStorage.setItem('coinCellBubble', coinCellBubble);
-            localStorage.setItem('coinBuyBubble', coinBuyBubble);
-            localStorage.setItem('halfCoinCellBubble', halfCoinCellBubble);
-            localStorage.setItem('halfCoinBuyBubble', halfCoinBuyBubble);
-            localStorage.setItem('quarterCoinCellBubble', quarterCoinCellBubble);
-            localStorage.setItem('quarterCoinBuyBubble', quarterCoinBuyBubble);
+            // ذخیره مقادیر توی localStorage
+            localStorage.setItem('delta', delta);
+            localStorage.setItem('coinBubble', coinBubble);
+            localStorage.setItem('halfCoinBubble', halfCoinBubble);
+            localStorage.setItem('quarterCoinBubble', quarterCoinBubble);
 
-            if (isNaN(ounce) || isNaN(usd) || isNaN(coinCellBubble) || isNaN(coinBuyBubble) || 
-                isNaN(halfCoinCellBubble) || isNaN(halfCoinBuyBubble) || 
-                isNaN(quarterCoinCellBubble) || isNaN(quarterCoinBuyBubble)) {
+            if (isNaN(ounce) || isNaN(usd) || isNaN(delta) || isNaN(coinBubble) || 
+                isNaN(halfCoinBubble) || isNaN(quarterCoinBubble)) {
                 alert('لطفاً همه مقادیر را به‌درستی وارد کنید!');
                 return;
             }
 
-            const universalQuote = (ounce * usd) / 9.57;
-            const dollarBuy = Math.round(usd - 500); // حذف اعشار
-            const dollarSell = Math.round(usd + 500); // حذف اعشار
-            const coinCell = Math.round(universalQuote * 2.253 + coinCellBubble); // حذف اعشار
-            const coinBuy = Math.round(universalQuote * 2.253 + coinBuyBubble); // حذف اعشار
-            const halfCoinCell = Math.round((universalQuote * 2.253) / 2 + halfCoinCellBubble); // حذف اعشار
-            const halfCoinBuy = Math.round((universalQuote * 2.253) / 2 + halfCoinBuyBubble); // حذف اعشار
-            const quarterCoinCell = Math.round((universalQuote * 2.253) / 4 + quarterCoinCellBubble); // حذف اعشار
-            const quarterCoinBuy = Math.round((universalQuote * 2.253) / 4 + quarterCoinBuyBubble); // حذف اعشار
+            // محاسبات جدید
+            const universalQuote = Math.round((ounce * usd) / (9.57)); // مظنه جهانی با اعمال دلتا
+            const spread = delta * usd;
+            const usdCell = usd + spread;
+            const usdBuy = usd - spread;
+            const qouteCell = once * usdCell / 9.57;
+            const qouteBuy = once * usdBuy / 9.57;
+            const cellQoute = qouteCell * 2.253 + coinBubble;
+            const coinBuy = Math.round(qouteBuy * 2.253 + coinBubble); // قیمت خرید سکه
+            const coinSell = Math.round(qouteCell * 2.253 + coinBubble); // قیمت فروش سکه (با کاهش نصف حباب)
+            const halfCoinBuy = Math.round(qouteBuy / 2 * 2.253 + halfCoinBubble); // قیمت خرید نیم‌سکه
+            const halfCoinSell = Math.round(qouteCell / 2 * 2.253 + halfCoinBubble); // قیمت فروش نیم‌سکه
+            const quarterCoinBuy = Math.round(qouteBuy / 4 * 2.253 + halfCoinBubble); // قیمت خرید ربع‌سکه
+            const quarterCoinSell = Math.round(qouteCell / 4 * 2.253 + quarterCoinBubble); // قیمت فروش ربع‌سکه
 
             const resultDiv = document.getElementById('result');
             resultDiv.style.display = 'block';
             resultDiv.innerHTML = `
-                قیمت خرید دلار: ${dollarBuy.toLocaleString()} تومان<br>
-                قیمت فروش دلار: ${dollarSell.toLocaleString()} تومان<br>
-                قیمت سکه تمام (خرید): ${coinCell.toLocaleString()} تومان<br>
-                قیمت سکه تمام (فروش): ${coinBuy.toLocaleString()} تومان<br>
-                قیمت نیم‌سکه (خرید): ${halfCoinCell.toLocaleString()} تومان<br>
-                قیمت نیم‌سکه (فروش): ${halfCoinBuy.toLocaleString()} تومان<br>
-                قیمت ربع‌سکه (خرید): ${quarterCoinCell.toLocaleString()} تومان<br>
-                قیمت ربع‌سکه (فروش): ${quarterCoinBuy.toLocaleString()} تومان
+                مظنه جهانی: ${universalQuote.toLocaleString()} تومان<br>
+                دلار (خرید): ${usdBuy.toLocaleString()} تومان<br>
+                دلار (فروش): ${usdCell.toLocaleString()} تومان<br>
+                قیمت سکه (خرید): ${coinBuy.toLocaleString()} تومان<br>
+                قیمت سکه (فروش): ${coinSell.toLocaleString()} تومان<br>
+                قیمت نیم‌سکه (خرید): ${halfCoinBuy.toLocaleString()} تومان<br>
+                قیمت نیم‌سکه (فروش): ${halfCoinSell.toLocaleString()} تومان<br>
+                قیمت ربع‌سکه (خرید): ${quarterCoinBuy.toLocaleString()} تومان<br>
+                قیمت ربع‌سکه (فروش): ${quarterCoinSell.toLocaleString()} تومان
             `;
             document.getElementById('share-button').style.display = 'block';
         }
 
-        
-
         function shareResult() {
-        const resultDiv = document.getElementById('result').innerText;
-        const shareText = `نتیجه محاسبه قیمت:\n${resultDiv}\nمحاسبه‌شده در ${new Date().toLocaleString('fa-IR')}`;
-
-        navigator.clipboard.writeText(shareText).then(() => {
-            alert('نتیجه در کلیپ‌بورد کپی شد!');
+            const resultDiv = document.getElementById('result').innerText;
+            const shareText = `نتیجه محاسبه قیمت:\n${resultDiv}\nمحاسبه‌شده در ${new Date().toLocaleString('fa-IR')}`;
+            navigator.clipboard.writeText(shareText).then(() => {
+                alert('نتیجه در کلیپ‌بورد کپی شد!');
             }).catch(err => {
-            alert('خطا در کپی کردن: ' + err);
+                alert('خطا در کپی کردن: ' + err);
             });
         }
-        
     </script>
 </html>
