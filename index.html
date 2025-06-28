@@ -176,10 +176,10 @@
             const c = ounce / 9.57;
             const coinBuy = Math.round( c * (usd + spread) * 2.253 + coinBubble); // قیمت خرید سکه
             const coinSell = Math.round(c * (usd - spread) * 2.253 + coinBubble); // قیمت فروش سکه
-            const halfCoinBuy = Math.round(c * (usd + 2 * spread) * 2.253 + halfCoinBubble); // قیمت خرید نیم‌سکه
-            const halfCoinSell = Math.round(c * (usd - 2 * spread) * 2.253 + halfCoinBubble); // قیمت فروش نیم‌سکه
-            const quarterCoinBuy = Math.round(c * (usd + 4 * spread) * 2.253 + quarterCoinBubble); // قیمت خرید ربع‌سکه
-            const quarterCoinSell = Math.round(c * (usd - 4 * spread) * 2.253 + quarterCoinBubble); // قیمت فروش ربع‌سکه
+            const halfCoinBuy = Math.round(c * (usd + 2 * spread) * 2.253 / 2 + halfCoinBubble); // قیمت خرید نیم‌سکه
+            const halfCoinSell = Math.round(c * (usd - 2 * spread) * 2.253 / 2 + halfCoinBubble); // قیمت فروش نیم‌سکه
+            const quarterCoinBuy = Math.round(c * (usd + 4 * spread) * 2.253 / 4 + quarterCoinBubble); // قیمت خرید ربع‌سکه
+            const quarterCoinSell = Math.round(c * (usd - 4 * spread) * 2.253 / 4 + quarterCoinBubble); // قیمت فروش ربع‌سکه
 
             const resultDiv = document.getElementById('result');
             resultDiv.style.display = 'block';
