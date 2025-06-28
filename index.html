@@ -168,18 +168,18 @@
 
             // محاسبات تصحیح‌شده
             const spread = delta * usd; // اسپرد بر اساس دلتا
-            const usdBuy = Math.round(usd - spread); // قیمت خرید دلار
-            const usdSell = Math.round(usd + spread); // قیمت فروش دلار
+            const usdBuy = Math.round((usd - spread)/1000)*1000; // قیمت خرید دلار
+            const usdSell = Math.round(usd + spread)/1000)*1000; // قیمت فروش دلار
             const universalQuote = Math.round((ounce * usd) / 9.57); // مظنه جهانی اولیه
             const quoteCell = Math.round((ounce * usdSell) / 9.57); // مظنه با قیمت فروش دلار
             const quoteBuy = Math.round((ounce * usdBuy) / 9.57); // مظنه با قیمت خرید دلار
             const c = ounce / 9.57;
-            const coinBuy = Math.round( c * (usd + spread) * 2.253 + coinBubble); // قیمت خرید سکه
-            const coinSell = Math.round(c * (usd - spread) * 2.253 + coinBubble); // قیمت فروش سکه
-            const halfCoinBuy = Math.round(c * (usd + 2 * spread) * 2.253 / 2 + halfCoinBubble); // قیمت خرید نیم‌سکه
-            const halfCoinSell = Math.round(c * (usd - 2 * spread) * 2.253 / 2 + halfCoinBubble); // قیمت فروش نیم‌سکه
-            const quarterCoinBuy = Math.round(c * (usd + 4 * spread) * 2.253 / 4 + quarterCoinBubble); // قیمت خرید ربع‌سکه
-            const quarterCoinSell = Math.round(c * (usd - 4 * spread) * 2.253 / 4 + quarterCoinBubble); // قیمت فروش ربع‌سکه
+            const coinBuy = Math.round(( c * (usd + spread) * 2.253 + coinBubble)/1000)*1000; // قیمت خرید سکه
+            const coinSell = Math.round((c * (usd - spread) * 2.253 + coinBubble)/1000)*1000; // قیمت فروش سکه
+            const halfCoinBuy = Math.round((c * (usd + 2 * spread) * 2.253 / 2 + halfCoinBubble)/1000)*1000; // قیمت خرید نیم‌سکه
+            const halfCoinSell = Math.round((c * (usd - 2 * spread) * 2.253 / 2 + halfCoinBubble)/1000)*1000; // قیمت فروش نیم‌سکه
+            const quarterCoinBuy = Math.round((c * (usd + 4 * spread) * 2.253 / 4 + quarterCoinBubble)/1000)*1000; // قیمت خرید ربع‌سکه
+            const quarterCoinSell = Math.round((c * (usd - 4 * spread) * 2.253 / 4 + quarterCoinBubble)/1000)*1000; // قیمت فروش ربع‌سکه
 
             const resultDiv = document.getElementById('result');
             resultDiv.style.display = 'block';
