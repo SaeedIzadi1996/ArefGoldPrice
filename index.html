@@ -168,8 +168,8 @@
 
             // محاسبات تصحیح‌شده
             const spread = delta * usd; // اسپرد بر اساس دلتا
-            const usdBuy = Math.round((usd - spread)/1000)*1000; // قیمت خرید دلار
-            const usdSell = Math.round((usd + spread)/1000)*1000; // قیمت فروش دلار
+            const usdBuy = Math.round((usd - spread)/100)*100; // قیمت خرید دلار
+            const usdSell = Math.round((usd + spread)/100)*100; // قیمت فروش دلار
             const universalQuote = Math.round((ounce * usd) / 9.57); // مظنه جهانی اولیه
             const quoteCell = Math.round((ounce * usdSell) / 9.57); // مظنه با قیمت فروش دلار
             const quoteBuy = Math.round((ounce * usdBuy) / 9.57); // مظنه با قیمت خرید دلار
